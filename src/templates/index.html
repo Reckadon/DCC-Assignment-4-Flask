@@ -1,4 +1,86 @@
 {% extends "base.html" %}
 {% block content%}
-    <h1>Hi</h1>
+<div class="bond-search-form-container row g-3 align-items-center justify-content-center">
+    <div class="col-auto">
+        <form method="post" class="row">
+            <label for="inputbondnumber" class="text-center h3 col-form-label">Enter Bond Number to Search:</label>
+            <input name="bond-number" type="number" id="inputbondnumber" class="h3 form-control">
+            <button type="submit" class="btn btn-primary mb-3">Search</button>
+        </form>
+    </div>
+</div>
+<div class="tables-container">
+    {% if searching %}
+    <table class="table">
+        <caption class="text-center caption-top">Bonds Encashed By Parties Data</caption>
+        <thead>
+        <tr>
+            <th scope="col">Sr No.</th>
+            <th scope="col">Date of Encashment</th>
+            <th scope="col">Name of Political Party</th>
+            <th scope="col">Account Number of Party</th>
+            <th scope="col">Prefix</th>
+            <th scope="col">Bond Number</th>
+            <th scope="col">Denominations</th>
+            <th scope="col">Pay Branch Code</th>
+            <th scope="col">Pay Teller</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for entry in party_data%}
+        <tr>
+            <th scope="row">{{entry[0]}}</th>
+            <td>{{entry[1]}}</td>
+            <th>{{entry[2]}}</th>
+            <td>{{entry[3]}}</td>
+            <td>{{entry[4]}}</td>
+            <th>{{entry[5]}}</th>
+            <td>{{entry[6]}}</td>
+            <td>{{entry[7]}}</td>
+            <td>{{entry[8]}}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <table class="table">
+        <caption class="text-center caption-top">Bonds Purchased By Companies or Individuals Data</caption>
+        <thead>
+        <tr>
+            <th scope="col">Sr No.</th>
+            <th scope="col">Reference No (URN)</th>
+            <th scope="col">Journal Date</th>
+            <th scope="col">Date of Purchase</th>
+            <th scope="col">Date of Expiry</th>
+            <th scope="col">Name of the Purchaser</th>
+            <th scope="col">Prefix</th>
+            <th scope="col">Bond Number</th>
+            <th scope="col">Denominations</th>
+            <th scope="col">Issue Branch Code</th>
+            <th scope="col">Issue Teller</th>
+            <th scope="col">Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for entry in company_data%}
+        <tr>
+            <th scope="row">{{entry[0]}}</th>
+            <td>{{entry[1]}}</td>
+            <th>{{entry[2]}}</th>
+            <td>{{entry[3]}}</td>
+            <td>{{entry[4]}}</td>
+            <td>{{entry[5]}}</td>
+            <td>{{entry[6]}}</td>
+            <th>{{entry[7]}}</th>
+            <td>{{entry[8]}}</td>
+            <td>{{entry[9]}}</td>
+            <td>{{entry[10]}}</td>
+            <td>{{entry[11]}}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% elif no_res %}
+    <h4 class="text-center">No Data found for given Bond Number!</h4>
+    {% endif %}
+</div>
 {% endblock %}

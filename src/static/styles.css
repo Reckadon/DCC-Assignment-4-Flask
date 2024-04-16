@@ -1,3 +1,16 @@
+.content{
+    padding:10px;
+    box-sizing: border-box;
+}
+
+.content .bond-search-form-container::before{
+    margin-top: 30px;
+    content: '';
+    width: 90%;
+    height: 2px;
+    background-color: #edf4ff;
+}
+
 input[type = 'search']{
     min-width: 230px
 }
