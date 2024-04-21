@@ -1,3 +1,6 @@
+em{
+    color: #1251ae;
+}
 .content{
     padding:10px;
     box-sizing: border-box;
@@ -13,4 +16,24 @@
 
 input[type = 'search']{
     min-width: 230px
+}
+
+.split-container{
+    width:100%;
+    display:flex;
+}
+.split-container .left{
+    width: 50%;
+    padding:5px;
+    border-right:2px solid #edf4ff;
+}
+.split-container .right{
+    width:50%;
+    padding:5px;
+
+}
+
+.btn-save{
+    position: relative;
+    top: -12px;
 }

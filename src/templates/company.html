@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% block content%}
+<div class="row g-3 align-items-center justify-content-center">
+    <div class="col-auto">
+        <form method="post" class="row">
+            <label for="companyselect" class="text-center h3 col-form-label">Enter Company/Individual's Name to
+                Search:</label>
+            <input type="hidden" name="search-field" value="company-search">
+            <select id="companyselect" name='company-name' class="h3 form-control">
+                {% for name in names %}
+                {% if name[0] == selected_name %}
+                <option selected>{{name[0]}}</option>
+                {% else %}
+                <option>{{name[0]}}</option>
+                {% endif %}
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-primary mb-3">Search</button>
+        </form>
+    </div>
+</div>
+<div class="tables-container" id="search-results">
+    {% if searching %}
+    <h4>Total value of Bonds Purchased by {{selected_name}}: <em>{{total}}</em></h4>
+    <div class="split-container mt-3">
+        <div class="left">
+            <canvas id="year-wise-company-chart"></canvas>
+            <button class="btn-save btn btn-sm btn-outline-secondary" onclick="year_chart_download.click()">Save as PNG</button>
+            <table class="table" style="margin-top: -25px">
+                <caption class="text-center caption-top h6">Year Wise Data of Bonds Purchased</caption>
+                <thead>
+                <tr>
+                    <th scope="col">Year</th>
+                    <th scope="col">Number of Bonds Purchased</th>
+                    <th scope="col">Total Value of Bonds</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for entry in year_data%}
+                <tr>
+                    <th>{{entry[0]}}</th>
+                    <td>{{entry[1]}}</td>
+                    <td>{{entry[2]}}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="right">
+            <canvas id="party-wise-company-chart"></canvas>
+            <button class="btn-save btn btn-sm btn-outline-secondary" onclick="party_chart_download.click()">Save as PNG</button>
+            <table class="table" style="margin-top: -25px">
+                <caption class="text-center caption-top h6">Party Wise Data of Bonds Purchased</caption>
+                <thead>
+                <tr>
+                    <th scope="col">Party</th>
+                    <th scope="col">Total Value of Bonds</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for entry in party_data%}
+                <tr>
+                    <th scope="row">{{entry[0]}}</th>
+                    <td>{{entry[1]}}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<script>
+    {% if searching %}
+    var year_chart_download = document.createElement('a');
+
+    var year_data_chart = new Chart(document.getElementById("year-wise-company-chart"), {
+          type: 'bar',
+          data: {
+            labels: {{years|safe}},
+            datasets: [
+              {
+                label: "Total Value",
+                backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+                data: {{year_data_values}}
+              }
+            ]
+          },
+          options: {
+            legend: { display: false },
+            animation: {
+                onComplete: function () {
+                    year_chart_download.href = year_data_chart.toBase64Image();
+                    year_chart_download.download = '{{selected_name}}-year-wise-data.png';
+                },
+            },
+            title: {
+              display: true,
+              text: "Total Value of Bonds Purchased per Year of {{selected_name}}"
+            },
+          }
+      });
+
+    var party_chart_download = document.createElement('a');
+
+    var party_data_chart = new Chart(document.getElementById("party-wise-company-chart"), {
+          type: 'doughnut',
+          data: {
+            labels: {{parties|safe}},
+            datasets: [
+              {
+                label: "Total Value",
+                backgroundColor: ["#7AC74F", "#0D0221","#F17105","#E0C879","#6610F2", "#ED1C24", "#D9D0DE", "#0F084B"],
+                data: {{party_data_values}}
+              }
+            ]
+          },
+          options: {
+            legend: { display: true },
+            animation: {
+                onComplete: function () {
+                    party_chart_download.href = party_data_chart.toBase64Image();
+                    party_chart_download.download = '{{selected_name}}-party-wise-data.png';
+                },
+            },
+            title: {
+              display: true,
+              text: "Total Value of Bonds Donated by {{selected_name}} to Parties"
+            },
+          }
+      });
+    {% endif %}
+</script>
+{% endblock %}
